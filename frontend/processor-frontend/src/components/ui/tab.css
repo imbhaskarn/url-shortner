@@ -1,0 +1,73 @@
+/* File: ../components/ui/tabs.css */
+
+.tabs-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .tabs-list {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .tabs-trigger {
+    background-color: transparent;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #888;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s ease;
+    outline: none;
+  }
+  
+  .tabs-trigger::before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    width: 0;
+    height: 4px;
+    background-color: #546de5;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+  
+  .tabs-trigger:hover {
+    color: #333;
+  }
+  
+  .tabs-trigger.active {
+    color: #546de5;
+  }
+  
+  .tabs-trigger.active::before {
+    width: 100%;
+    left: 0;
+  }
+  
+  .tabs-content {
+    padding: 20px;
+    border: 1px solid #ddd;
+    
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
