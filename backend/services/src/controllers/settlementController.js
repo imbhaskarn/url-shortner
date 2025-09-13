@@ -1,6 +1,6 @@
-const Settlement = require("../models/Settlement");
-const MerchantProfile = require("../models/MerchantProfile");
-const Payout = require("../models/Payout");
+const Settlement = require("../models/settlement");
+const MerchantProfile = require("../models/merchantProfile");
+const Payout = require("../models/payout");
 
 // Create a new settlement
 async function createSettlement(req, res) {

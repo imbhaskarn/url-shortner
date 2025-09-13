@@ -1,4 +1,4 @@
-const MerchantSubscriber = require('../models/MerchantSubscriber');
+const MerchantSubscriber = require('../models/merchantSubscriber');
 async function createSubscription(req, res) {
 
     try {

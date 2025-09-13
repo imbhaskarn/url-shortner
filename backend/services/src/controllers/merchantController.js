@@ -1,6 +1,6 @@
 // controllers/merchantController.js
-const { Merchant } = require('../models/MerchantProfile');
-const MerchantProfile = require('../models/MerchantProfile');
+const { Merchant } = require('../models/merchantProfile');
+const MerchantProfile = require('../models/merchantProfile');
 
 // Onboard a new merchant
 async function onboardMerchant(req, res) {

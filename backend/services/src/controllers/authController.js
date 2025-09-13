@@ -1,5 +1,5 @@
 const { generateOTP } = require("../utils/otpGenerator");
-const User = require('../models/User');
+const User = require('../models/user');
 const crypto = require('crypto');
 const notificationController = require("../controllers/notificationController");
 const emailService = require('../utils/emailService');

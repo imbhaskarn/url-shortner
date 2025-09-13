@@ -18,7 +18,7 @@ requiredEnv.forEach((key) => {
 connectDB();
 
 // Controllers
-const { authenticateUser } = require('./middleware/AuthMiddleware'); // Fixed casing
+const { authenticateUser } = require('./middleware/authMiddleware'); // Fixed casing
 const { handleWebhook } = require('./controllers/webhookController');
 const { processPayment } = require('./controllers/paymentController');
 const { processPayout } = require('./controllers/payoutController');

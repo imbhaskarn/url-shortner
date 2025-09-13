@@ -1,3 +1,7 @@
+const { validateCard } = require('./cardValidator');
+const { tokenize } = require('./tokenization');
+const { authenticateCard } = require('./authenticateCard');
+
 async function processPayment(req, res) {
     const {
         paymentMethod,
@@ -67,7 +71,7 @@ async function processPayment(req, res) {
 
         // Notification
         if (req.user && req.user._id) {
-            const Notification = require("../models/Notification");
+            const Notification = require("../models/notification");
             await Notification.create({
                 user: req.user._id,
                 type: "transaction",
@@ -107,3 +111,5 @@ async function processPayment(req, res) {
         });
     }
 }
+
+module.exports = { processPayment };

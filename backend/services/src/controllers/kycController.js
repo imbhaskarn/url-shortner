@@ -1,4 +1,4 @@
-const MerchantProfile = require('../models/MerchantProfile');
+const MerchantProfile = require('../models/merchantProfile');
 
 // Create or update merchant KYC profile
 async function createOrUpdateMerchantProfile(req, res) {

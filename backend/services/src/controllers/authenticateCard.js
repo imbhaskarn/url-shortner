@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { getCardTypeProvider } = require('./CardTypeProvider'); // Utility to get provider based on card type
+const { getCardTypeProvider } = require('./cardTypeProvider'); // Utility to get provider based on card type
 
 const VISA_API = process.env.VISA_API_URL;
 const MASTERCARD_API = process.env.MASTERCARD_API_URL;

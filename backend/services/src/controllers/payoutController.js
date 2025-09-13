@@ -1,5 +1,5 @@
-const Payout = require('../models/Payout');
-const Merchant = require('../models/MerchantProfile');
+const Payout = require('../models/payout');
+const Merchant = require('../models/merchantProfile');
 
 async function processPayout(req, res) {
   try {

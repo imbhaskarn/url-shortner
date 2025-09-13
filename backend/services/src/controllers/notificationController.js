@@ -1,5 +1,5 @@
-const Notification = require("../models/Notification");
-const User = require("../models/User");
+const Notification = require("../models/notification");
+const User = require("../models/user");
 
 // Helper: create notification directly (can be called from anywhere)
 async function createNotification(data) {

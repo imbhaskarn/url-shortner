@@ -2,8 +2,8 @@
 const express = require('express');
 const router = express.Router();
 const Stripe = require('stripe');
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const FailedPayment = require('../models/FailedPayment');
+const stripe = 'new Stripe(process.env.STRIPE_SECRET_KEY);'
+const FailedPayment = require('../models/failedPayment');
 
 router.post('/', express.raw({ type: 'application/json' }), async (req, res) => {
   const sig = req.headers['stripe-signature'];

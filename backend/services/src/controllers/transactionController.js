@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const Transaction = require('../models/transaction');
 const User = require('../models/user');
-const MerchantProfile = require('../models/MerchantProfile');
+const MerchantProfile = require('../models/merchantProfile');
 
 
 
