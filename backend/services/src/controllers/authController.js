@@ -56,7 +56,7 @@ async function register(req, res) {
     //   token
     // });
   } catch (err) {
-    console.error("Registration error:", err.message);
+    console.error("Registration error:", err);
     res.status(500).json({ message: "Server error" });
   }
 }
