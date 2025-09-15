@@ -8,11 +8,12 @@ import { Input } from '../components/ui/Input';
 import { Label } from '../components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/AvatarComponents';
 import { submitForm } from '../services/api';
+import logo from "../assets/logo.jpg"; 
 
 const MultiStepForm = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    user: { first_name: '', last_name: '', email: '', password: '' },
+    user: { name: '', email: '', password: '' },
     avatar: {image: null},
     organization: { name: '', category: '', organization_size: '' },
   });
@@ -52,8 +53,8 @@ const MultiStepForm = () => {
     const newErrors = [];
     switch (step) {
       case 1:
-        if (!formData.user.first_name) newErrors.push('First Name is required');
-        if (!formData.user.last_name) newErrors.push('Last Name is required');
+        if (!formData.user.name) newErrors.push('First Name is required');
+        // if (!formData.user.last_name) newErrors.push('Last Name is required');
         if (!formData.user.email) newErrors.push('Email is required');
         if (!formData.user.password) newErrors.push('Password is required');
         break;
@@ -87,15 +88,25 @@ const MultiStepForm = () => {
       try {
         const response = await submitForm(formData); 
         console.log('Form submitted:', response);
-  
-        if (response.access && response.refresh) {
-          localStorage.setItem('access_token', response.access);
-          localStorage.setItem('refresh_token', response.refresh);
-          localStorage.setItem('user', JSON.stringify(response.user));
-          window.location.href = '/';
+
+         if (response.accessToken && response.refreshToken) {
+          localStorage.setItem("access_token", response.accessToken);
+          localStorage.setItem("refresh_token", response.refreshToken);
+          localStorage.setItem("user", JSON.stringify(response.user));
+          // navigate("/dashboard"); 
+          window.location.href = "/";
         } else {
-          console.error('No token received:', response);
+           console.error('No token received:', response);
         }
+  
+        // if (response.access && response.refresh) {
+        //   localStorage.setItem('access_token', response.access);
+        //   localStorage.setItem('refresh_token', response.refresh);
+        //   localStorage.setItem('user', JSON.stringify(response.user));
+        //   window.location.href = '/';
+        // } else {
+        //   console.error('No token received:', response);
+        // }
       } catch (error) {
         if (error.response && error.response.data) {
           const errorMessages = error.response.data.non_field_errors || 
@@ -121,14 +132,14 @@ const MultiStepForm = () => {
               <div className="space-y-2">
                 <Label htmlFor="firstName" className="text-gray-700">First Name</Label>
                 <Input
-                  id="first_name"
+                  id="name"
                   placeholder="Enter your first name"
-                  value={formData.user.first_name}
-                  onChange={(e) => handleChange('user', 'first_name', e.target.value)}
+                  value={formData.user.name}
+                  onChange={(e) => handleChange('user', 'name', e.target.value)}
                   className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                 />
               </div>
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <Label htmlFor="lastName" className="text-gray-700">Last Name</Label>
                 <Input
                   id="last_name"
@@ -137,7 +148,7 @@ const MultiStepForm = () => {
                   onChange={(e) => handleChange('user', 'last_name', e.target.value)}
                   className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                 />
-              </div>
+              </div> */}
             </div>
             <div className="space-y-2">
               <Label htmlFor="email" className="text-gray-700">Work Email</Label>
@@ -173,8 +184,8 @@ const MultiStepForm = () => {
                 <Avatar className="w-16 h-16 border-2 border-gray-200">
                   <AvatarImage src={formData.user.avatar} alt="Avatar" />
                   <AvatarFallback className="bg-blue-100 text-blue-600">
-                    {formData.user.first_name.charAt(0)}
-                    {formData.user.last_name.charAt(0)}
+                    {formData.user.name.charAt(0)}
+                    {/* {formData.user.last_name.charAt(0)} */}
                   </AvatarFallback>
                 </Avatar>
                 <input

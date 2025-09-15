@@ -23,7 +23,7 @@ const router = express.Router();
 // Rate limiter for login route
 const loginRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // limit each IP to 5 login requests per windowMs
+  max: 50, // limit each IP to 5 login requests per windowMs
   message: {
     message: 'Too many login attempts from this IP. Please try again after 15 minutes.'
   },
@@ -32,8 +32,17 @@ const loginRateLimiter = rateLimit({
 });
 
 // Auth routes with validation
-router.post('/register', validateRegister, register);
-router.post('/login', loginRateLimiter, validateLogin, login);
+router.post('/register', (req, res, next) => {
+  console.log('Login attempt:', req.body);
+  console.log('Request Type:', req.method)
+  next()
+}, validateRegister, register);
+router.post('/login', 
+  (req, res, next) => {
+  console.log('Login attempt:', req.body);
+  console.log('Request Type:', req.method)
+  next()
+},loginRateLimiter, validateLogin, login);
 
 // No validation needed for these
 router.post('/password-reset', resetPassword);

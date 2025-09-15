@@ -1,4 +1,5 @@
 import React from 'react';
+import { Avatar as AvatarImages } from '@mui/material';
 
 export const Avatar: React.FC<React.HTMLProps<HTMLDivElement>> = ({ children, className, ...props }) => (
   <div className={`flex items-center justify-center ${className}`} {...props}>
@@ -13,7 +14,8 @@ export const AvatarFallback: React.FC<React.HTMLProps<HTMLDivElement>> = ({ chil
 );
 
 export const AvatarImage: React.FC<React.ImgHTMLAttributes<HTMLImageElement>> = ({ className, ...props }) => (
-  <img className={`w-10 h-10 rounded-full ${className}`} {...props} />
+  <AvatarImages  className={`w-10 h-10 rounded-full ${className}`} {...props} />
+  
 );
 
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.jpg";
 import { useNavigate, Link } from "react-router-dom";
 import { AlertCircle, ArrowRight, CheckCircle, Chrome } from "lucide-react";
 import { Alert, AlertDescription } from "../components/ui/alert";
@@ -49,16 +49,20 @@ export const LoginPage = () => {
       try {
         const response = await loginForm(formData);
 
-        if (response.access && response.refresh) {
-          localStorage.setItem("access_token", response.access);
-          localStorage.setItem("refresh_token", response.refresh);
+        console.log("Login response:", response);
+
+        if (response.accessToken && response.refreshToken) {
+          localStorage.setItem("access_token", response.accessToken);
+          localStorage.setItem("refresh_token", response.refreshToken);
           localStorage.setItem("user", JSON.stringify(response.user));
+          // navigate("/dashboard"); 
           window.location.href = "/";
-        } else if (response.detail) {
+        } if (response.detail) {
           setErrors([response.detail]);
-        } else {
-          setErrors(["An unknown error occurred. Please try again."]);
         }
+        // else {
+        //   setErrors(["An unknown error occurred. Please try again."]);
+        // }
       } catch (error) {
         console.error("Error logging in:", error);
         setErrors(["Invalid login credentials, Please try again"]);

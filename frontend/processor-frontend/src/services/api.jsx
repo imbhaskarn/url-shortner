@@ -55,7 +55,7 @@ export const processPayment = async (paymentData) => {
 // ---------- AUTH SUPPLEMENTARY (signup/login forms used in pages) ----------
 export const submitForm = async (payload) => {
   try {
-    const response = await fetch(`${API_URL}/api/auth/register/`, {
+    const response = await fetch(`${API_URL}/api/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -69,7 +69,7 @@ export const submitForm = async (payload) => {
 
 export const loginForm = async (payload) => {
   try {
-    const response = await fetch(`${API_URL}/api/auth/login/`, {
+    const response = await fetch(`${API_URL}/api/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -84,6 +84,7 @@ export const loginForm = async (payload) => {
 export const Roles = async () => {
   try {
     const token = localStorage.getItem("access_token");
+    console.log("token from local storage", token)
     if (!token) throw new Error("No auth token");
     const response = await fetch(`${API_URL}/api/role/`, {
       headers: { Authorization: `Bearer ${token}` },

@@ -1,0 +1,183 @@
+### XS Backend API Tests
+### Base URL
+@baseUrl = http://localhost:5000/api
+
+### Variables
+@email = john.doe@example.com
+@password = password123
+
+
+### Register User - Full Data
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "phone": "+1234567890",
+  "address": "123 Main St, New York, NY 10001",
+  "apiKey": "test-api-key-12345"
+}
+
+### Register User - Minimal Required Data
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Jane Smith",
+  "email": "jane.smith@example.com",
+  "password": "securepass123"
+}
+
+### Login User
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+### Verify OTP (after login)
+POST {{baseUrl}}/auth/verify-otp
+Content-Type: application/json
+
+{
+  "userId": "USER_ID_FROM_LOGIN_RESPONSE",
+  "otp": "123456"
+}
+
+### Resend OTP
+POST {{baseUrl}}/auth/resend-otp
+Content-Type: application/json
+
+{
+  "userId": "USER_ID_FROM_LOGIN_RESPONSE"
+}
+
+### Password Reset - Send Email
+POST {{baseUrl}}/auth/sendreset
+Content-Type: application/json
+
+{
+  "email": "{{email}}"
+}
+
+### Password Reset - Reset with Token
+POST {{baseUrl}}/auth/password-reset
+Content-Type: application/json
+
+{
+  "token": "RESET_TOKEN_FROM_EMAIL",
+  "newPassword": "newpassword123"
+}
+
+### Refresh Token
+POST {{baseUrl}}/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken": "REFRESH_TOKEN_FROM_LOGIN"
+}
+
+###############################################
+# Health Check
+###############################################
+
+### Health Check
+GET {{baseUrl}}/health
+
+###############################################
+# Payment Routes
+###############################################
+
+### Process Payment
+POST {{baseUrl}}/payment
+Content-Type: application/json
+Authorization: Bearer ACCESS_TOKEN_HERE
+
+{
+  "amount": 1000,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "cardDetails": {
+    "number": "4242424242424242",
+    "expMonth": "12",
+    "expYear": "2025",
+    "cvc": "123"
+  },
+  "description": "Test payment"
+}
+
+###############################################
+# Transaction Routes
+###############################################
+
+### Get All Transactions
+GET {{baseUrl}}/transactions
+Authorization: Bearer ACCESS_TOKEN_HERE
+
+### Refund Transaction
+POST {{baseUrl}}/transactions/TRANSACTION_ID/refund
+Content-Type: application/json
+Authorization: Bearer ACCESS_TOKEN_HERE
+
+{
+  "amount": 500,
+  "reason": "Customer request"
+}
+
+### Create Chargeback
+POST {{baseUrl}}/transactions/TRANSACTION_ID/chargeback
+Content-Type: application/json
+Authorization: Bearer ACCESS_TOKEN_HERE
+
+{
+  "amount": 1000,
+  "reason": "Fraudulent transaction"
+}
+
+###############################################
+# Payout & Settlement Routes
+###############################################
+
+### Process Payout
+POST {{baseUrl}}/payouts
+Content-Type: application/json
+Authorization: Bearer ACCESS_TOKEN_HERE
+
+{
+  "amount": 5000,
+  "currency": "USD",
+  "recipient": "recipient@example.com",
+  "description": "Monthly payout"
+}
+
+### Create Settlement
+POST {{baseUrl}}/settlements
+Content-Type: application/json
+Authorization: Bearer ACCESS_TOKEN_HERE
+
+{
+  "amount": 10000,
+  "currency": "USD",
+  "merchantId": "MERCHANT_ID_HERE"
+}
+
+###############################################
+# Webhook Test
+###############################################
+
+### Test Webhook
+POST http://localhost:5000/webhook
+Content-Type: application/json
+
+{
+  "event": "payment.completed",
+  "data": {
+    "transactionId": "tx_123456",
+    "amount": 1000,
+    "status": "completed"
+  }
+}

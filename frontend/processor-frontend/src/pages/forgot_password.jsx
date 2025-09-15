@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; // Import hooks for routing
-import logo from '../assets/logo.png';
+import logo from '../assets/logo.jpg';
 
 export  const ResetPassword = () => {
     const { uid, token } = useParams(); 

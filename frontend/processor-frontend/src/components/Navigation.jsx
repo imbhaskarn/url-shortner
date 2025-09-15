@@ -7,7 +7,7 @@ import {
   ChevronDown, Menu, X, Search, Bell, Settings,MessageCircle,
   DollarSign, Mail, Megaphone, Calendar, Headphones, Box, Inbox, File, CheckCircle
 } from 'lucide-react';
-import logo from '../assets/logo.png';
+import logo from '../assets/logo.jpg';
 import { Badge } from '../components/ui/Badge';
 
 const Navigation = ({ darkMode, toggleDarkMode, userRole , handleLogout}) => {

@@ -63,11 +63,21 @@ async function login(req, res) {
 
     console.log(`OTP for ${email}: ${otp}`); // For testing, log OTP to console
     // await emailService.sendOTPEmail(user.email, otp);
+    
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
 
     res.status(200).json({
-      message: "OTP sent. Please verify to complete login.",
-      userId: user._id
+      message: "OTP verified successfully.",
+      accessToken,
+      refreshToken,
+      user: { id: user._id, name: user.name, email: user.email }
     });
+
+    // res.status(200).json({
+    //   message: "OTP sent. Please verify to complete login.",
+    //   userId: user._id
+    // });
 
   } catch (err) {
     console.error('Login error:', err);

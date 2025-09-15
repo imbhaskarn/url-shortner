@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 // ✅ Validate required env variables before starting
-process.env.MONGO_URI=`mongodb://localhost:27017/clarity`
+process.env.MONGO_URI=`mongodb+srv://satyamkumark12_db_user:ELln7F7YovHBn5SL@cluster0.e2qg72z.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
 const requiredEnv = ['MONGO_URI', 'JWT_SECRET'];
 requiredEnv.forEach((key) => {
   if (!process.env[key]) {
