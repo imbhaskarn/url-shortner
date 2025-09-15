@@ -1,13 +1,10 @@
 const { generateOTP } = require("../utils/otpGenerator");
-const User = require('../models/user');
-const crypto = require('crypto');
+const User = require("../models/user");
+const crypto = require("crypto");
 const notificationController = require("../controllers/notificationController");
-const emailService = require('../utils/emailService');
+const emailService = require("../utils/emailService");
 const { generateApiKey } = require("../ultils/generateApiKey");
-const {
-  generateAccessToken,
-  generateRefreshToken
-} = require("../utils/jwt");
+const { generateAccessToken, generateRefreshToken } = require("../utils/jwt");
 
 // 📦 Register
 async function register(req, res) {
@@ -15,7 +12,8 @@ async function register(req, res) {
     const { name, email, phone, address, password } = req.body;
 
     const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: 'User already exists' });
+    if (existingUser)
+      return res.status(400).json({ message: "User already exists" });
 
     // Auto-generate API key for the new user
     const apiKey = generateApiKey();
@@ -27,29 +25,39 @@ async function register(req, res) {
 
     // await emailService.sendVerificationEmail(email, token);
 
-    try {
-      await notificationController.createNotification({
-        body: {
-          userId: newUser._id,
-          type: "register",
-          title: "Welcome Aboard!",
-          message: "Thanks for registering. Your account has been created."
-        }
-      });
-    } catch (err) {
-      console.warn("Notification failed:", err.message);
-    }
+    // try {
+    //   await notificationController.createNotification({
+    //     body: {
+    //       userId: newUser._id,
+    //       type: "register",
+    //       title: "Welcome Aboard!",
+    //       message: "Thanks for registering. Your account has been created.",
+    //     },
+    //   });
+    // } catch (err) {
+    //   console.warn("Notification failed:", err.message);
+    // }
 
-    res.status(201).json({
-      message: 'User registered successfully',
+    const accessToken = generateAccessToken(newUser);
+    const refreshToken = generateRefreshToken(newUser);
+
+    res.status(200).json({
+      message: "User registered successfully",
+      accessToken,
+      refreshToken,
+      apiKey: apiKey,
       user: { id: newUser._id, name: newUser.name, email: newUser.email },
-      apiKey: apiKey, // Include the generated API key in response
-      token
     });
 
+    // res.status(201).json({
+    //   message: 'User registered successfully',
+    //   user: { id: newUser._id, name: newUser.name, email: newUser.email },
+    //   apiKey: apiKey, // Include the generated API key in response
+    //   token
+    // });
   } catch (err) {
-    console.error('Registration error:', err.message);
-    res.status(500).json({ message: 'Server error' });
+    console.error("Registration error:", err.message);
+    res.status(500).json({ message: "Server error" });
   }
 }
 
@@ -59,7 +67,7 @@ async function login(req, res) {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user || !(await user.matchPassword(password)))
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(400).json({ message: "Invalid credentials" });
 
     const otp = generateOTP();
     user.otp = await user.encryptOTP(otp);
@@ -68,7 +76,7 @@ async function login(req, res) {
 
     console.log(`OTP for ${email}: ${otp}`); // For testing, log OTP to console
     // await emailService.sendOTPEmail(user.email, otp);
-    
+
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
@@ -76,17 +84,16 @@ async function login(req, res) {
       message: "OTP verified successfully.",
       accessToken,
       refreshToken,
-      user: { id: user._id, name: user.name, email: user.email }
+      user: { id: user._id, name: user.name, email: user.email },
     });
 
     // res.status(200).json({
     //   message: "OTP sent. Please verify to complete login.",
     //   userId: user._id
     // });
-
   } catch (err) {
-    console.error('Login error:', err);
-    res.status(500).json({ message: 'Server error' });
+    console.error("Login error:", err);
+    res.status(500).json({ message: "Server error" });
   }
 }
 
@@ -96,7 +103,7 @@ const verifyOTP = async (req, res) => {
     const { userId, otp } = req.body;
 
     const user = await User.findById(userId);
-    if (!user || !await user.verifyOTP(otp) || user.otpExpiresAt < Date.now())
+    if (!user || !(await user.verifyOTP(otp)) || user.otpExpiresAt < Date.now())
       return res.status(401).json({ message: "Invalid or expired OTP" });
 
     user.isVerified = true;
@@ -111,9 +118,8 @@ const verifyOTP = async (req, res) => {
       message: "OTP verified successfully.",
       accessToken,
       refreshToken,
-      user: { id: user._id, name: user.name, email: user.email }
+      user: { id: user._id, name: user.name, email: user.email },
     });
-
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -144,14 +150,16 @@ const verifyEmail = async (req, res) => {
   try {
     const decoded = jwt.verify(req.params.token, process.env.JWT_ACCESS_SECRET);
     const user = await User.findById(decoded.id);
-    if (!user) return res.status(404).json({ message: 'User not found.' });
+    if (!user) return res.status(404).json({ message: "User not found." });
 
     user.isVerified = true;
     await user.save();
 
-    res.status(200).json({ message: 'Email verified successfully.' });
+    res.status(200).json({ message: "Email verified successfully." });
   } catch (err) {
-    res.status(400).json({ message: 'Invalid or expired token.', error: err.message });
+    res
+      .status(400)
+      .json({ message: "Invalid or expired token.", error: err.message });
   }
 };
 
@@ -159,18 +167,20 @@ const verifyEmail = async (req, res) => {
 const sendResetEmail = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-    if (!user) return res.status(404).json({ message: 'User not found.' });
+    if (!user) return res.status(404).json({ message: "User not found." });
 
-    const token = crypto.randomBytes(20).toString('hex');
+    const token = crypto.randomBytes(20).toString("hex");
     user.otp = await user.encryptOTP(token);
     user.otpExpiresAt = Date.now() + 3600000;
     await user.save();
 
     await emailService.sendResetPasswordEmail(user.email, token);
 
-    res.status(200).json({ message: 'Reset password email sent.' });
+    res.status(200).json({ message: "Reset password email sent." });
   } catch (err) {
-    res.status(500).json({ message: 'Failed to send reset email', error: err.message });
+    res
+      .status(500)
+      .json({ message: "Failed to send reset email", error: err.message });
   }
 };
 
@@ -182,20 +192,24 @@ const resetPassword = async (req, res) => {
 
     const users = await User.find({ otpExpiresAt: { $gt: Date.now() } });
     const matchedUser = await Promise.any(
-      users.map(async user => (await user.verifyOTP(token)) ? user : Promise.reject())
+      users.map(async (user) =>
+        (await user.verifyOTP(token)) ? user : Promise.reject()
+      )
     ).catch(() => null);
 
-    if (!matchedUser) return res.status(400).json({ message: 'Invalid or expired token.' });
+    if (!matchedUser)
+      return res.status(400).json({ message: "Invalid or expired token." });
 
     matchedUser.password = password;
     matchedUser.otp = undefined;
     matchedUser.otpExpiresAt = undefined;
     await matchedUser.save();
 
-    res.status(200).json({ message: 'Password reset successfully.' });
-
+    res.status(200).json({ message: "Password reset successfully." });
   } catch (err) {
-    res.status(500).json({ message: 'Error resetting password', error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error resetting password", error: err.message });
   }
 };
 
@@ -206,5 +220,5 @@ module.exports = {
   resendOTP,
   verifyEmail,
   sendResetEmail,
-  resetPassword
+  resetPassword,
 };

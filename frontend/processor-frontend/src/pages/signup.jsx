@@ -57,56 +57,106 @@ const SignupForm = () => {
     setErrors(newErrors);
     return newErrors.length === 0;
   };
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      setLoading(true);
+  e.preventDefault();
+  if (validateForm()) {
+    setLoading(true);
 
-      try {
-        const response = await submitForm(formData);
-        console.log("Form submitted:", response);
+    try {
+      const response = await submitForm(formData);
+      console.log("Form submitted:", response);
 
-        if (response.accessToken && response.refreshToken) {
-          localStorage.setItem("access_token", response.accessToken);
-          localStorage.setItem("refresh_token", response.refreshToken);
-          localStorage.setItem("user", JSON.stringify(response.user));
+      if (response.accessToken && response.refreshToken) {
+        localStorage.setItem("access_token", response.accessToken);
+        localStorage.setItem("refresh_token", response.refreshToken);
+        localStorage.setItem("user", JSON.stringify(response.user));
 
-          // Store the generated API key for display
-          if (response.apiKey) {
-            setGeneratedApiKey(response.apiKey);
-            localStorage.setItem("api_key", response.apiKey);
-            console.log("Generated API Key:", response.apiKey);
+        // Store the generated API key for display
+        if (response.apiKey) {
+          setGeneratedApiKey(response.apiKey);
+          localStorage.setItem("api_key", response.apiKey);
+          console.log("Generated API Key:", response.apiKey);
 
-            // Delay redirect to show API key
-            setTimeout(() => {
-              window.location.href = "/";
-            }, 5000); // 5 second delay
-          } else {
-            window.location.href = "/";
-          }
+          // 🔥 Direct redirect without delay
+          window.location.href = "/";
         } else {
-          console.error("No token received:", response);
+          window.location.href = "/";
         }
-      } catch (error) {
-        if (error.response && error.response.data) {
-          const errorMessages =
-            error.response.data.errors ||
-            error.response.data.non_field_errors ||
-            Object.values(error.response.data).flat();
-          setErrors(
-            errorMessages.map((msg) =>
-              msg.replace(/email|username/i, "this information")
-            )
-          );
-        } else {
-          console.error("Error Registration in:", error);
-          setErrors(["Registration failed. Please try again."]);
-        }
-      } finally {
-        setLoading(false);
+      } else {
+        console.error("No token received:", response);
       }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        const errorMessages =
+          error.response.data.errors ||
+          error.response.data.non_field_errors ||
+          Object.values(error.response.data).flat();
+        setErrors(
+          errorMessages.map((msg) =>
+            msg.replace(/email|username/i, "this information")
+          )
+        );
+      } else {
+        console.error("Error Registration in:", error);
+        setErrors(["Registration failed. Please try again."]);
+      }
+    } finally {
+      setLoading(false);
     }
-  };
+  }
+};
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (validateForm()) {
+  //     setLoading(true);
+
+  //     try {
+  //       const response = await submitForm(formData);
+  //       console.log("Form submitted:", response);
+
+  //       if (response.accessToken && response.refreshToken) {
+  //         localStorage.setItem("access_token", response.accessToken);
+  //         localStorage.setItem("refresh_token", response.refreshToken);
+  //         localStorage.setItem("user", JSON.stringify(response.user));
+
+  //         // Store the generated API key for display
+  //         if (response.apiKey) {
+  //           setGeneratedApiKey(response.apiKey);
+  //           localStorage.setItem("api_key", response.apiKey);
+  //           console.log("Generated API Key:", response.apiKey);
+
+  //           // Delay redirect to show API key
+  //           setTimeout(() => {
+  //             window.location.href = "/";
+  //           }, 5000); // 5 second delay
+  //         } else {
+  //           window.location.href = "/";
+  //         }
+  //       } else {
+  //         console.error("No token received:", response);
+  //       }
+  //     } catch (error) {
+  //       if (error.response && error.response.data) {
+  //         const errorMessages =
+  //           error.response.data.errors ||
+  //           error.response.data.non_field_errors ||
+  //           Object.values(error.response.data).flat();
+  //         setErrors(
+  //           errorMessages.map((msg) =>
+  //             msg.replace(/email|username/i, "this information")
+  //           )
+  //         );
+  //       } else {
+  //         console.error("Error Registration in:", error);
+  //         setErrors(["Registration failed. Please try again."]);
+  //       }
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }
+  // };
 
   const renderForm = () => {
     return (
