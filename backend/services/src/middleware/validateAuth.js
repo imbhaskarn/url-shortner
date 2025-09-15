@@ -19,8 +19,7 @@ exports.validateRegister = [
     .withMessage("Password must be at least 6 characters"),
   check("name").notEmpty().withMessage("Name is required"),
   check("phone").notEmpty().withMessage("Phone is required"),
-check("address").notEmpty().withMessage("Address is required"),
-check("apiKey").notEmpty().withMessage("API Key is required"),
+  check("address").notEmpty().withMessage("Address is required"),
 
   (req, res, next) => {
     const errors = validationResult(req);

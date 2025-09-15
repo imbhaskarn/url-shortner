@@ -3,6 +3,7 @@ const User = require('../models/user');
 const crypto = require('crypto');
 const notificationController = require("../controllers/notificationController");
 const emailService = require('../utils/emailService');
+const { generateApiKey } = require("../ultils/generateApiKey");
 const {
   generateAccessToken,
   generateRefreshToken
@@ -11,10 +12,13 @@ const {
 // 📦 Register
 async function register(req, res) {
   try {
-    const { name, email, phone, address, apiKey, password } = req.body;
+    const { name, email, phone, address, password } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: 'User already exists' });
+
+    // Auto-generate API key for the new user
+    const apiKey = generateApiKey();
 
     const newUser = new User({ name, email, phone, address, apiKey, password });
     await newUser.save();
@@ -39,6 +43,7 @@ async function register(req, res) {
     res.status(201).json({
       message: 'User registered successfully',
       user: { id: newUser._id, name: newUser.name, email: newUser.email },
+      apiKey: apiKey, // Include the generated API key in response
       token
     });
 
