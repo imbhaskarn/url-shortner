@@ -1,16 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardContent } from '../components/ui/CardComponents2';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Input } from '../components/ui/Input';
-import { Label } from '../components/ui/label';
-import { Avatar } from '../components/ui/AvatarComponents';
-import { Badge } from '../components/ui/Badge';
-import { Skeleton } from '../components/ui/skeleton';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { LogOut, RefreshCw, AlertCircle } from 'lucide-react';
+import { useState, useEffect } from "react";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+} from "../components/ui/CardComponents2";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../components/ui/tabs";
+import { Input } from "../components/ui/Input";
+import { Label } from "../components/ui/label";
+import { Avatar } from "../components/ui/AvatarComponents";
+import { Badge } from "../components/ui/Badge";
+import { Skeleton } from "../components/ui/skeleton";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+import { LogOut, RefreshCw, AlertCircle } from "lucide-react";
 import { Button } from "../components/ui/Button";
-import { fetchUser } from '../services/api';
-const SkeletonDemo = () => {
+import { fetchUser } from "../services/api";
+
+export const SkeletonDemo = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center space-x-4">
@@ -24,10 +43,11 @@ const SkeletonDemo = () => {
       <Skeleton className="h-4 w-[300px]" />
       <Skeleton className="h-4 w-[250px]" />
     </div>
-  )
-}
+  );
+};
 
-const ProfilePage = ({userRole}) => {
+// eslint-disable-next-line react/prop-types
+const ProfilePage = ({ userRole }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
@@ -40,8 +60,8 @@ const ProfilePage = ({userRole}) => {
         setUserData(response);
         setError(null);
       } catch (err) {
-        setError('Failed to load profile data');
-        console.error('Error:', err);
+        setError("Failed to load profile data");
+        console.error("Error:", err);
       } finally {
         setIsLoading(false);
       }
@@ -85,18 +105,22 @@ const ProfilePage = ({userRole}) => {
             <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
               <div className="flex items-center space-x-4">
                 <Avatar>
-                  <img 
-                    src={userData?.userData?.profileImage || `https://ui-avatars.com/api/?name=${userData?.userData?.firstName}+${userData?.userData?.lastName}`} 
-                    alt="Profile" 
+                  <img
+                    src={
+                      userData?.userData?.profileImage ||
+                      `https://ui-avatars.com/api/?name=${userData?.userData?.firstName}+${userData?.userData?.lastName}`
+                    }
+                    alt="Profile"
                     className="h-16 w-16 rounded-full"
                   />
                 </Avatar>
                 <div>
                   <h2 className="text-2xl font-bold">
-                    {userData?.userData?.firstName} {userData?.userData?.lastName}
+                    {userData?.userData?.firstName}{" "}
+                    {userData?.userData?.lastName}
                   </h2>
                   <p className="">{userData?.userData?.jobTitle}</p>
-                  <Badge className='bg-purple-500 text-white'>{userRole}</Badge>
+                  <Badge className="bg-purple-500 text-white">{userRole}</Badge>
                 </div>
               </div>
               <div className="flex space-x-2">
@@ -143,7 +167,16 @@ const ProfilePage = ({userRole}) => {
                   </div>
                   <div className="space-y-2">
                     <Label>Date Joined</Label>
-                    <Input value={new Date(userData?.userData?.jobTitle).toLocaleDateString()} disabled />
+                    <Input
+                      value={
+                        userData?.userData?.dateJoined
+                          ? new Date(
+                              userData?.userData?.dateJoined
+                            ).toLocaleDateString()
+                          : "N/A"
+                      }
+                      disabled
+                    />
                   </div>
                 </div>
               )}
@@ -159,10 +192,15 @@ const ProfilePage = ({userRole}) => {
               ) : (
                 <div className="space-y-4">
                   {userData?.loginActivities?.map((activity, index) => (
-                    <div key={index} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                    <div
+                      key={index}
+                      className="flex justify-between items-center p-4 bg-gray-50 rounded-lg"
+                    >
                       <div>
                         <p className="font-medium">{activity.action}</p>
-                        <p className="text-sm ">{new Date(activity.date).toLocaleString()}</p>
+                        <p className="text-sm ">
+                          {new Date(activity.date).toLocaleString()}
+                        </p>
                       </div>
                       <Badge variant="outline">{activity.ip}</Badge>
                     </div>

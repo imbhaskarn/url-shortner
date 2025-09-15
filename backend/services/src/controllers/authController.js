@@ -21,7 +21,7 @@ async function register(req, res) {
 
     const token = generateAccessToken(newUser); // access token for email verification
 
-    await emailService.sendVerificationEmail(email, token);
+    // await emailService.sendVerificationEmail(email, token);
 
     try {
       await notificationController.createNotification({
@@ -61,7 +61,8 @@ async function login(req, res) {
     user.otpExpiresAt = Date.now() + 5 * 60 * 1000;
     await user.save();
 
-    await emailService.sendOTPEmail(user.email, otp);
+    console.log(`OTP for ${email}: ${otp}`); // For testing, log OTP to console
+    // await emailService.sendOTPEmail(user.email, otp);
 
     res.status(200).json({
       message: "OTP sent. Please verify to complete login.",

@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 // ✅ Validate required env variables before starting
+process.env.MONGO_URI=`mongodb://localhost:27017/clarity`
 const requiredEnv = ['MONGO_URI', 'JWT_SECRET'];
 requiredEnv.forEach((key) => {
   if (!process.env[key]) {
@@ -35,6 +36,7 @@ const kycRoutes = require('./routes/kycRoutes');
 const notificationRoutes = require('./routes/notifications');
 const usageRoutes = require('./routes/usage');
 const webhooksRoute = require('./routes/webhooks');
+const roleRoutes = require('./routes/roleRoutes');
 
 const app = express();
 
@@ -56,6 +58,7 @@ app.use('/api/merchant/subscribers', merchantSubscriberRoutes); // ✅ safer sub
 app.use('/api/merchant/kyc', kycRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/usage', usageRoutes);
+app.use('/api/role', roleRoutes);
 
 // Payments
 app.post('/api/payment', processPayment);

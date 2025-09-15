@@ -70,12 +70,13 @@ const deleteTransaction = asyncHandler(async (req, res) => {
 });
 
 
- const  getAllTransactions = await Transaction.find({ user: userId })
+const getAllTransactions = asyncHandler(async (req, res) => {
+  const transactions = await Transaction.find()
     .populate('user', 'name email') // Populating user info if needed
     .populate('merchant', 'businessName'); // Populating merchant info if needed
 
   if (!transactions || transactions.length === 0) {
-    return res.status(404).json({ success: false, message: 'No transactions found for this user' });
+    return res.status(404).json({ success: false, message: 'No transactions found' });
   }
 
   res.json({ success: true, transactions });
