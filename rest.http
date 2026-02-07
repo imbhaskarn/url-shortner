@@ -1,0 +1,28 @@
+POST http://localhost:4000/url-shortner
+Content-Type: application/json
+
+{
+  "url": "https://www.example.com",
+  "custom_alias": "myshort"
+}
+
+###
+
+GET http://localhost:4000/ENvama
+Content-Type: application/json
+
+# {
+#   "url": "https://www.example.com",
+#   "custom_alias": "myshort"
+# }
+
+###
+
+
+POST http://localhost:4000/bulk-shortener
+Content-Type: application/json
+
+{
+  "url": "https://www.example.com",
+  "custom_alias": "myshort"
+}
